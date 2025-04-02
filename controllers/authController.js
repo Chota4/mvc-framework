@@ -18,7 +18,7 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await db.oneOrNone("SELECT * FROMusers WHEREemail = $1", [
+    const user = await db.oneOrNone("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
     if (!user) {
@@ -29,9 +29,13 @@ exports.loginUser = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
     req.session.user = { id: user.id, name: user.name, email: user.email };
-    res.json({ message: "Login successful", user: req.session.user });
+    req.session.userData = req.session.user;
+    res.redirect('/home');
   } catch (err) {
-    res.status(500).json({ error: "Error logging in" });
+    res.status(500).json({ 
+      error: "Error logging in",
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
   }
 };
 // Logout
