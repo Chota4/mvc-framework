@@ -36,8 +36,6 @@
 .signup-form input:focus {
     border-color: #f4a261;
 }
-
-
 /* Signup Button */
 .signup-form button {
     padding: 10px;

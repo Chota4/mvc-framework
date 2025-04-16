@@ -9,7 +9,7 @@ const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/authRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const profileRoutes = require('./routes/profileRoutes');
-const bookRoutes = require("./routes/bookRoutes");
+const bookRoutes = require('./routes/bookRoutes');
 
 //load environment variables
 dotenv.config();
@@ -17,11 +17,13 @@ dotenv.config();
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
+
+
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'Chota4',
+    secret: 'gyeltshenMk',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -48,21 +50,19 @@ app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 app.use('/', homeRoutes);
 app.use('/', profileRoutes);
-app.use("/", bookRoutes);
-
-
+app.use('/', bookRoutes);
 //for db connection
 app.get('/db-test', async (req, res) => {
-    try {
-        const result = await db.one('SELECT NOW() AS current_time');
-        res.json({ message: 'Database connected successfully', time: result.current_time });
-    } catch (err) {
-        res.status(500).json({ error: 'Database connection failed', details: err.message });
-    }
+  try {
+      const result = await db.one('SELECT NOW() AS current_time');
+      res.json({ message: 'Database connected successfully', time: result.current_time });
+  } catch (err) {
+      res.status(500).json({ error: 'Database connection failed', details: err.message });
+  }
 });
 
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
